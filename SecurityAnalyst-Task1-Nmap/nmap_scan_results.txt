@@ -1,0 +1,149 @@
+Nmap Network Scanning - Task 1
+Oasis Infobyte - Security Analyst Track
+_____________________________________________________________
+
+1. Project Information:
+_______________________
+
+For this task, I used Nmap to scan a local Ubuntu Server virtual machine and check its open ports and running services.
+
+The scanning was performed from Kali Linux. Both machines were running in Oracle VirtualBox and connected through a Host-only network.
+
+Scanner: Kali Linux
+Scanner IP: 192.168.56.101
+Target: Ubuntu Server 26.04.1
+Target IP: 192.168.56.104
+Nmap Version: 7.991
+Network: VirtualBox Host-only
+
+2. Initial Basic Scan:
+______________________
+
+Command used:
+nmap 192.168.56.104
+
+At the beginning, SSH was not running on the Ubuntu target.
+
+The scan showed that the machine was online, but all 1000 scanned TCP ports were closed.
+
+Result:
+- Host Status: Up
+- Scanned Ports: 1000 TCP ports
+- Open Ports: 0
+- Closed Ports: 1000
+
+I saved this result to compare it with the next scan.
+
+3. Basic Scan After Starting SSH:
+_________________________________
+
+After installing OpenSSH on Ubuntu and starting the service, I performed the same basic scan again.
+
+Command used:
+nmap 192.168.56.104
+
+This time, the result was different. Nmap found port 22 open and identified the service as SSH.
+
+Result:
+- Host Status: Up
+- Open Ports: 1
+- Closed Ports: 999
+- Open Port: 22/tcp
+- Service: SSH
+
+This showed me that starting a network service can change the results of a port scan.
+
+4. Service Version Detection:
+_____________________________
+
+I first checked port 22 specifically using:
+
+nmap -sV -p 22 192.168.56.104
+
+The result identified the service as OpenSSH 10.2p1
+Ubuntu 2ubuntu3.8.
+
+After that, I performed a full service version scan
+using:
+
+nmap -sV 192.168.56.104
+
+The scan checked the default 1000 TCP ports and found
+one open port:
+
+Port: 22/tcp
+Service: SSH
+Version: OpenSSH 10.2p1 Ubuntu 2ubuntu3.8
+
+The other 999 scanned ports were closed.
+
+Both scans returned the same SSH version information.
+
+5. Operating System Detection:
+______________________________
+
+I also tried to identify the operating system using this command:
+
+sudo nmap -O 192.168.56.104
+
+The scan completed successfully, but Nmap displayed the following message:
+
+No exact OS matches for host
+
+It collected TCP/IP fingerprint information but did not find an exact match for the operating system.
+
+I know that the target is Ubuntu Server 26.04.1 because I installed it myself. However, Nmap did not confirm this through its OS detection feature.
+
+Other information:
+- Host Status: Up
+- Open Port: 22/tcp
+- Closed Ports: 999
+- Network Distance: 1 hop
+
+6. Open Port Analysis:
+______________________
+
+During the scans, I found one open TCP port.
+
+Port 22 - SSH
+
+SSH is used to connect to and manage Linux machines remotely. It provides an encrypted connection between the client and the server.
+
+Possible security concerns:
+- Weak login passwords.
+- Unauthorized login attempts.
+- Allowing connections from untrusted devices.
+- Using outdated SSH software.
+
+Recommended security measures:
+- Use strong passwords or SSH key authentication.
+- Keep OpenSSH updated.
+- Allow SSH connections only from trusted devices when possible.
+- Monitor login activity and authentication logs.
+
+An open port does not automatically mean that the system has a vulnerability. I did not confirm any exploitable vulnerability during this task.
+
+7. Scan Limitations:
+____________________
+
+There are a few limitations to this test:
+
+- The basic scan checked the default 1000 common TCP ports, not all available ports.
+- The full service version scan covered Nmap's default 1000 most common TCP ports.
+- A separate targeted scan was also performed on port 22.
+- OS detection did not return an exact operating system match.
+- No UDP scanning was performed.
+- No exploitation or vulnerability testing was performed.
+
+The results represent the target's condition during the time of testing.
+
+8. Conclusion:
+______________
+
+This task gave me practical experience with Nmap and basic network scanning.
+
+I started with a basic scan and found that all scanned ports were closed. After starting the SSH service on Ubuntu, port 22 appeared as open.
+
+I then used service version detection to identify OpenSSH and its reported version. I also tried OS detection, but Nmap could not find an exact match.
+
+Overall, I learned how to identify open ports and running services on a local machine and how to read and save Nmap scan results.
